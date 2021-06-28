@@ -46,7 +46,10 @@ public class Calculator extends JFrame {
         buttonList.add(eightButton);
         JButton nineButton = new JButton("9");
         buttonList.add(nineButton);
-        initNumbers()
+        initNumbers();
+
+        // add operation buttons
+        // add = and cancel (which calls on reset() ) buttons
     }
 
     public class ResultLabel extends JLabel {
@@ -60,7 +63,7 @@ public class Calculator extends JFrame {
         for(Object button : buttonList) {
              button = (JButton) button;
              //add button onto button jpanel
-            
+
              ((JButton) button).addActionListener(new ActionListener() {
                  @Override
                  public void actionPerformed(ActionEvent e) {
