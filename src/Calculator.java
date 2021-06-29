@@ -2,6 +2,10 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +13,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Calculator extends JFrame {
-    JLabel screen;
-    JPanel numberPanel;
-    JPanel operationPanel;
+    public static final int BUTTON_SPACING = 5;
+    public static final int PANEL_SPACING = BUTTON_SPACING*2;
+    public static final Color BCKGRND_COLOUR = Color.LIGHT_GRAY;
+
+    private JLabel screen;
+    private JPanel numberPanel;
+    private JPanel operationPanel;
 
     public Calculator() {
         initialize();
@@ -19,14 +27,27 @@ public class Calculator extends JFrame {
 
     private void initialize() {
         this.setLayout(new BorderLayout());
+        this.setMinimumSize(new Dimension(400,400));
 
         screen = new ScreenLabel();
+        screen.setPreferredSize(new Dimension(200,100));
+        screen.setMinimumSize(new Dimension(200,50));
+        Border screenBorder = new LineBorder(BCKGRND_COLOUR, BUTTON_SPACING*2);
+        Border screenPadding = new EmptyBorder(10, 10,10, 10);
+        //screen.setBorder(screenPadding);
+        screen.setBorder(new CompoundBorder(screenBorder, screenPadding));
+        //screen.setBorder(BorderFactory.createLineBorder(BCKGRND_COLOUR, PADDING_SIZE*2));
+        //screen.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
         //this.add(screen, BorderLayout.NORTH);
         //screen.setVisible(true);
 
-        GridLayout numberLayout = new GridLayout(0,3);
+        GridLayout numberLayout = new GridLayout(0,3, BUTTON_SPACING, BUTTON_SPACING);
         numberPanel = new JPanel();
         numberPanel.setLayout(numberLayout);
+        numberPanel.setBackground(BCKGRND_COLOUR);
+        numberPanel.setBorder(new EmptyBorder(BUTTON_SPACING, BUTTON_SPACING*2, BUTTON_SPACING*2, BUTTON_SPACING));
+
 
         ArrayList<JButton> buttonList = new ArrayList<>();
 
@@ -58,13 +79,16 @@ public class Calculator extends JFrame {
         initButtons(buttonList, Color.PINK, numberPanel);
 
         JButton resetButton = new JButton("C");
+        customActionButtonSetup(resetButton, Color.white, numberPanel);
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 screen.setText("0");
             }
         });
+
         JButton equalsButton = new JButton("=");
+        customActionButtonSetup(equalsButton, Color.white, numberPanel);
         equalsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -82,12 +106,13 @@ public class Calculator extends JFrame {
             }
         });
 
-        numberPanel.add(resetButton);
-        numberPanel.add(equalsButton);
+        numberPanel.setPreferredSize(new Dimension(300,50));
+        numberPanel.setMinimumSize(new Dimension(200,50));
 
         // add operation buttons
         operationPanel = new JPanel();
-        operationPanel.setLayout(new GridLayout(0,1));
+        operationPanel.setLayout(new GridLayout(0,1, BUTTON_SPACING, BUTTON_SPACING));
+        operationPanel.setBackground(BCKGRND_COLOUR);
         ArrayList<JButton> operationButtonList = new ArrayList<>();
         JButton plusButton = new JButton("+");
         operationButtonList.add(plusButton);
@@ -98,6 +123,10 @@ public class Calculator extends JFrame {
         JButton divideButton = new JButton("/");
         operationButtonList.add(divideButton);
         initButtons(operationButtonList, new Color(243, 114, 181, 255), operationPanel);
+
+        operationPanel.setPreferredSize(new Dimension(200,200));
+        operationPanel.setMaximumSize(new Dimension(200,200));
+        operationPanel.setBorder(new EmptyBorder(BUTTON_SPACING, BUTTON_SPACING, BUTTON_SPACING*2, BUTTON_SPACING*2));
 
 
 
@@ -131,7 +160,7 @@ public class Calculator extends JFrame {
     }
 
     private void defaultButtonSetup(JButton button, Color colour, JPanel panel) {
-        button.setFont(new Font("SansSerif", Font.BOLD, 12));
+        button.setFont(new Font("SansSerif", Font.BOLD, 18));
         //button.setBackground(Color.PINK);
         button.setBackground(colour);
         //button.setMinimumSize(new Dimension(200,200));
@@ -149,6 +178,17 @@ public class Calculator extends JFrame {
             }
         });
 
+    }
+
+    private void customActionButtonSetup(JButton button, Color colour, JPanel panel) {
+        button.setFont(new Font("SansSerif", Font.BOLD, 18));
+        //button.setBackground(Color.PINK);
+        button.setBackground(colour);
+        //button.setMinimumSize(new Dimension(200,200));
+        button.setBorder(BorderFactory.createRaisedBevelBorder());
+        //button.setBorder(new BasicBorders.ButtonBorder(Color.gray, ));
+        //numberPanel.add(button);
+        panel.add(button);
     }
 
 }
